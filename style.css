@@ -1,0 +1,21 @@
+/* Animação de piscar verde */
+@keyframes piscarGreen {
+  0% { background-color: #d1d5db; }
+  50% { background-color: #4CAF50; }
+  100% { background-color: #d1d5db; }
+}
+
+.icon-piscar-green {
+  animation: piscarGreen 1s infinite;
+}
+
+/* Animação de piscar vermelha */
+@keyframes piscarRed {
+  0% { background-color: #d1d5db; }
+  50% { background-color: #F44336; }
+  100% { background-color: #d1d5db; }
+}
+
+.icon-piscar-red {
+  animation: piscarRed 1s infinite;
+}

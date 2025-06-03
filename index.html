@@ -10,22 +10,28 @@
 </head>
 <body class="bg-gray-100 h-screen flex items-center justify-center">
   <div class="bg-white rounded-2xl shadow-xl w-[1200px] h-[700px] p-6 flex flex-col">
-    <!-- Parte superior: Conexões -->
-    <div class="flex space-x-4 mb-4">
-      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center">
+          <!-- Parte superior: Conexões -->
+          <div class="flex space-x-4 mb-4">
+      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center relative">
         <h2 class="font-bold">OI</h2>
-        <p id="oi-velocidade">Atualizando...</p>
-      </div>
-      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center">
-        <h2 class="font-bold">EMBRASNET</h2>
-        <p id="embrasnet-velocidade">Atualizando...</p>
-        <div class="flex items-center space-x-2">
+        <p id="oi-velocidade" class="flex items-center justify-center space-x-2 text-red-600 font-semibold">
+          <i class="fa fa-wrench fa-lg"></i>
+          <span>EM DESENVOLVIMENTO...</span>
+        </p>
+        <div class="flex items-center space-x-2 absolute bottom-4 left-4">
           <i class="fa fa-microchip text-blue-500"></i>
           <span>Arduino (ESP32)</span>
         </div>
       </div>
+      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center">
+        <h2 class="font-bold">EMBRASNET</h2>
+        <p id="embrasnet-dow">Atualizando...</p>
+        <p id="embrasnet-up">Atualizando...</p>
+        <p id="embrasnet-ip">Atualizando...</p>
+        <p id="embrasnet-ping">Atualizando...</p>
+      
+      </div>
     </div>
-
     <div class="flex flex-1 space-x-4">
       <!-- Coluna da esquerda: Backups -->
       <div class="w-1/3 bg-gray-100 rounded-xl p-4 flex flex-col">
@@ -36,11 +42,11 @@
         <div class="mt-4">
           <label class="flex items-center space-x-2">
             <span>ddns activate:</span>
-            <span class="bg-green-400 text-white px-2 py-1 rounded-full text-xs">ON</span>
+            <!-- <span class="bg-green-400 text-white px-2 py-1 rounded-full text-xs">ON</span> -->
+            <i class="fa fa-wrench fa-lg"></i>
           </label>
         </div>
       </div>
-
       <!-- Coluna do meio: CAAD e Recursos -->
       <div class="w-1/2 flex flex-col items-center justify-center text-center bg-gray-100 rounded-xl p-4">
         <h3 class="text-2xl font-bold mb-4">CAAD</h3>

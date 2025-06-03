@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000'; // Altere conforme necessário
+const API_BASE = 'http://192.168.0.18:8080'; // Altere conforme necessário
 
 // Função para atualizar recursos do sistema
 function atualizarRecursos() {
@@ -32,13 +32,14 @@ function atualizarConectividade() {
   fetch(`${API_BASE}/internet`)
     .then(response => response.json())
     .then(data => {
-      document.getElementById('oi-velocidade').textContent = `VEL ${data.download.toFixed(2)} Mbps`;
-      document.getElementById('embrasnet-velocidade').textContent = `VEL ${data.upload.toFixed(2)} Mbps`;
+      document.getElementById('embrasnet-dow').textContent = `DOWNLOAD: ${data.download.toFixed(2)} Mbps`;
+      document.getElementById('embrasnet-up').textContent = `UPLOAD: ${data.upload.toFixed(2)} Mbps`;
+       document.getElementById('embrasnet-ip').textContent = `IP: ${data.local_ip} Mbps`;
+        document.getElementById('embrasnet-ping').textContent = `PING: ${data.ping.toFixed(2)} Mbps`;
     })
     .catch(error => console.error('Erro ao obter conectividade:', error));
 }
 
-// Função para atualizar processos em execução
 function atualizarProcessos() {
   fetch(`${API_BASE}/process`)
     .then(response => response.json())
@@ -46,34 +47,38 @@ function atualizarProcessos() {
       const processList = document.getElementById('process-list');
       processList.innerHTML = '';
 
-      const processos = [
-        { nome: 'MONI SERVE', ativo: data.process },
-        { nome: 'MONI MOBILE', ativo: true },
-        { nome: 'MONI GPRS', ativo: false },
-        { nome: 'MONI TRACKER', ativo: true },
-        { nome: 'MONI SEARCH', ativo: false },
-        { nome: 'Intelbras (ESP32)', ativo: true }
-      ];
+      // Mapeamento do nome real para nome amigável (exibição)
+      const nomesExibicao = {
+        "MoniIntegracao.exe": "MONI INT",
+        "MoniERP.exe": "MONI ERP",
+        "MoniServidor.exe": "MONI SERVER",
+        "MoniGPRS.exe": "MONI GPRS",
+        "MoniTarefas.exe": "MONI TAREFAS",
+        "MoniMobile.exe": "MONI MOBILE"
+      };
 
-      processos.forEach(proc => {
+      // Itera sobre o objeto retornado (nomeReal: ativo)
+      for (const [nomeReal, ativo] of Object.entries(data)) {
         const div = document.createElement('div');
         div.className = 'flex items-center space-x-2';
 
         const statusDot = document.createElement('div');
-        statusDot.className = `w-4 h-4 rounded-full ${proc.ativo ? 'bg-green-500 icon-piscar-green' : 'bg-red-500 icon-piscar-red'}`;
+        statusDot.className = `w-4 h-4 rounded-full ${
+          ativo ? 'bg-green-500 icon-piscar-green' : 'bg-red-500 icon-piscar-red'
+        }`;
         div.appendChild(statusDot);
 
         const span = document.createElement('span');
-        span.textContent = proc.nome;
+        span.textContent = nomesExibicao[nomeReal] || nomeReal; // Usa nome amigável ou o real se não achar
         div.appendChild(span);
 
         processList.appendChild(div);
-      });
+      }
     })
     .catch(error => console.error('Erro ao obter processos:', error));
 }
 
-// Função para atualizar status dos backups
+
 function atualizarBackups() {
   fetch(`${API_BASE}/backups`)
     .then(response => response.json())
@@ -82,7 +87,15 @@ function atualizarBackups() {
       backupList.innerHTML = '';
 
       const backups = data.origem_vs_local;
-      for (const [nome, status] of Object.entries(backups)) {
+
+      // Pega as entradas (nome, status) como array
+      const entries = Object.entries(backups);
+
+      // Pega os últimos 10 (se tiver menos que 10, pega todos)
+      const ultimos10 = entries.slice(-7);
+
+      // Cria os elementos para os últimos 10
+      for (const [nome, status] of ultimos10) {
         const div = document.createElement('div');
         div.className = 'flex justify-between bg-white p-2 rounded shadow';
         div.textContent = nome;

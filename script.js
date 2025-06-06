@@ -34,11 +34,41 @@ function atualizarConectividade() {
     .then(data => {
       document.getElementById('embrasnet-dow').textContent = `DOWNLOAD: ${data.download.toFixed(2)} Mbps`;
       document.getElementById('embrasnet-up').textContent = `UPLOAD: ${data.upload.toFixed(2)} Mbps`;
-       document.getElementById('embrasnet-ip').textContent = `IP: ${data.local_ip} Mbps`;
-        document.getElementById('embrasnet-ping').textContent = `PING: ${data.ping.toFixed(2)} Mbps`;
+       document.getElementById('embrasnet-ip').textContent = `IP: ${data.local_ip}`;
+        document.getElementById('embrasnet-ping').textContent = `MS: ${data.ping.toFixed(2)}`;
     })
     .catch(error => console.error('Erro ao obter conectividade:', error));
 }
+
+  async function verificarStatus() {
+    try {
+      const response = await   fetch(`${API_BASE}/esp-status`);
+      const status = await response.json();
+
+      const indicador = document.getElementById('status-indicator');
+      const statusTexto = indicador.querySelector('span');
+      const statusIcone = indicador.querySelector('i');
+      
+      console.log(status)
+
+      if (status === true) {
+        statusTexto.textContent = 'Acesso à Internet';
+        statusTexto.classList.replace('text-red-600', 'text-green-600');
+        statusIcone.classList.replace('fa-wrench', 'fa-check-circle');
+      }else if(status === false){
+        statusTexto.textContent = 'Sem Internet';
+        statusTexto.classList.replace('text-green-600', 'text-red-600');
+        statusIcone.classList.replace('fa-check-circle', 'fa-times-circle');
+      } 
+      else {
+        statusTexto.textContent = 'Verificando...';
+        statusTexto.classList.replace('text-green-600', 'text-red-600');
+        statusIcone.classList.replace('fa-check-circle', 'fa-times-circle');
+      }
+    } catch (error) {
+      console.error('Erro ao verificar o status:', error);
+    }
+  }
 
 function atualizarProcessos() {
   fetch(`${API_BASE}/process`)
@@ -92,7 +122,7 @@ function atualizarBackups() {
       const entries = Object.entries(backups);
 
       // Pega os últimos 10 (se tiver menos que 10, pega todos)
-      const ultimos10 = entries.slice(-7);
+      const ultimos10 = entries.slice(-5);
 
       // Cria os elementos para os últimos 10
       for (const [nome, status] of ultimos10) {
@@ -111,11 +141,12 @@ function atualizarBackups() {
 }
 
 // Função para atualizar todos os dados
-function atualizarTudo() {
+async function atualizarTudo() {
   atualizarRecursos();
   atualizarConectividade();
   atualizarProcessos();
   atualizarBackups();
+  await verificarStatus()
 }
 
 // Atualiza os dados ao carregar a página

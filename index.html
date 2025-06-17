@@ -11,45 +11,59 @@
 <body class="bg-gray-100 h-screen flex items-center justify-center">
   <div class="bg-white rounded-2xl shadow-xl w-[1200px] h-[700px] p-6 flex flex-col">
           <!-- Parte superior: Conexões -->
-          <div class="flex space-x-4 mb-4">
-      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center relative">
-        <h2 class="font-bold">OI</h2>
-        <p id="oi-velocidade" class="flex items-center justify-center space-x-2 text-red-600 font-semibold">
-          <i class="fa fa-wrench fa-lg"></i>
-          <span>EM DESENVOLVIMENTO...</span>
-        </p>
-        <div class="flex items-center space-x-2 absolute bottom-4 left-4">
-          <i class="fa fa-microchip text-blue-500"></i>
-          <span>Arduino (ESP32)</span>
-        </div>
+    <div class="flex space-x-4 mb-4">
+    <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center relative">
+      <h2 class="font-bold">OI</h2>
+      <p id="status-indicator" class="flex items-center justify-center space-x-2 text-red-600 font-semibold">
+        <span>VERIFICANDO...</span>
+      </p>
+      <div class="flex items-center space-x-2 absolute bottom-4 left-4">
+        <i class="fa fa-microchip text-blue-500"></i>
+        <span>Arduino (ESP32)</span>
       </div>
-      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center">
-        <h2 class="font-bold">EMBRASNET</h2>
-        <p id="embrasnet-dow">Atualizando...</p>
-        <p id="embrasnet-up">Atualizando...</p>
-        <p id="embrasnet-ip">Atualizando...</p>
-        <p id="embrasnet-ping">Atualizando...</p>
-      
-      </div>
+    </div>
+<div class="flex-1 bg-gray-200 rounded-xl p-4 text-center space-y-2 relative">
+  <h2 class="font-bold text-lg">EMBRASNET</h2>
+
+  <div class="flex items-center justify-center">
+    <i class="fa fa-signal text-green-600 mr-2"></i>
+    <p id="embrasnet-status">Carregando...</p>
+  </div>
+
+  <div class="flex items-center justify-center">
+    <i class="fa fa-clock-o text-red-500 mr-2"></i>
+    <p id="embrasnet-ping">Carregando...</p>
+  </div>
+
+  <div class="flex items-center justify-center">
+    <i class="fa fa-random text-yellow-500 mr-2"></i>
+    <p id="embrasnet-jitter">Carregando...</p>
+  </div>
+
+  <div class="flex items-center justify-center">
+    <i class="fa fa-times-circle text-purple-600 mr-2"></i>
+    <p id="embrasnet-packet-loss">Carregando...</p>
+  </div>
+</div>
     </div>
     <div class="flex flex-1 space-x-4">
       <!-- Coluna da esquerda: Backups -->
       <div class="w-1/3 bg-gray-100 rounded-xl p-4 flex flex-col">
-        <h3 class="text-center font-semibold mb-2">Backup</h3>
-        <div id="backup-list" class="flex-1 overflow-y-auto border rounded-lg p-2 space-y-2">
+        <h3 class="text-center font-semibold mb-2">BACKUP</h3>
+        <div id="backup-list" class="flex-1 border rounded-lg p-2 space-y-2 overflow-y-auto" style="max-height: 360px;">
           <!-- Itens de backup serão inseridos aqui -->
         </div>
-        <div class="mt-4">
-          <label class="flex items-center space-x-2">
-            <span>ddns activate:</span>
-            <!-- <span class="bg-green-400 text-white px-2 py-1 rounded-full text-xs">ON</span> -->
-            <i class="fa fa-wrench fa-lg"></i>
-          </label>
-        </div>
+
+          <div class="mt-4" id="ddns-status-container">
+            <label class="flex items-center space-x-2">
+              <span>DDNS</span>
+              <span id="ddns-status" class="px-2 py-1 rounded-full text-xs">VERIFICANDO...</span>
+            </label>
+          </div>
       </div>
       <!-- Coluna do meio: CAAD e Recursos -->
       <div class="w-1/2 flex flex-col items-center justify-center text-center bg-gray-100 rounded-xl p-4">
-        <h3 class="text-2xl font-bold mb-4">CAAD</h3>
+        <h3 class="text-2xl font-bold mb-4">SISTEMA</h3>
         <div class="w-full space-y-4">
           <!-- Barra de uso de RAM -->
           <div class="flex items-center space-x-2">
@@ -82,7 +96,7 @@
 
       <!-- Coluna da direita: Processos em segundo plano -->
       <div class="w-1/6 flex flex-col items-center bg-gray-100 rounded-xl p-4">
-        <h3 class="text-center font-semibold mb-4">Processos</h3>
+        <h3 class="text-center font-semibold mb-4">PROCESSOS</h3>
         <div id="process-list" class="space-y-4 w-full border-t border-gray-300 pt-4">
           <!-- Itens de processos serão inseridos aqui -->
         </div>

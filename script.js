@@ -1,4 +1,4 @@
-const API_BASE = 'http://192.168.0.18:8080'; // Altere conforme necessário
+const API_BASE = 'http://127.0.0.1:8080'; // Altere conforme necessário
 
 // Função para atualizar recursos do sistema
 function atualizarRecursos() {
@@ -27,17 +27,26 @@ function atualizarRecursos() {
     .catch(error => console.error('Erro ao obter recursos:', error));
 }
 
-// Função para atualizar conectividade com a internet
 function atualizarConectividade() {
   fetch(`${API_BASE}/internet`)
     .then(response => response.json())
     .then(data => {
-      document.getElementById('embrasnet-dow').textContent = `DOWNLOAD: ${data.download.toFixed(2)} Mbps`;
-      document.getElementById('embrasnet-up').textContent = `UPLOAD: ${data.upload.toFixed(2)} Mbps`;
-       document.getElementById('embrasnet-ip').textContent = `IP: ${data.local_ip} Mbps`;
-        document.getElementById('embrasnet-ping').textContent = `PING: ${data.ping.toFixed(2)} Mbps`;
+      document.getElementById('embrasnet-status').textContent = `Status: ${data.status}`;
+      document.getElementById('embrasnet-ping').textContent = data.ping_ms !== null
+        ? `Ping médio: ${data.ping_ms.toFixed(2)} ms`
+        : 'Ping médio: N/A';
+      document.getElementById('embrasnet-jitter').textContent = data.jitter_ms !== null
+        ? `Jitter: ${data.jitter_ms.toFixed(2)} ms`
+        : 'Jitter: N/A';
+      document.getElementById('embrasnet-packet-loss').textContent = `Perda de pacotes: ${data.packet_loss_pct.toFixed(2)} %`;
     })
-    .catch(error => console.error('Erro ao obter conectividade:', error));
+    .catch(error => {
+      console.error('Erro ao obter conectividade:', error);
+      document.getElementById('embrasnet-status').textContent = 'Erro ao carregar status';
+      document.getElementById('embrasnet-ping').textContent = '-';
+      document.getElementById('embrasnet-jitter').textContent = '-';
+      document.getElementById('embrasnet-packet-loss').textContent = '-';
+    });
 }
 
 function atualizarProcessos() {
@@ -54,7 +63,8 @@ function atualizarProcessos() {
         "MoniServidor.exe": "MONI SERVER",
         "MoniGPRS.exe": "MONI GPRS",
         "MoniTarefas.exe": "MONI TAREFAS",
-        "MoniMobile.exe": "MONI MOBILE"
+        "MoniMobile.exe": "MONI MOBILE",
+        "DUC40.exe": "DUC"
       };
 
       // Itera sobre o objeto retornado (nomeReal: ativo)
@@ -91,11 +101,8 @@ function atualizarBackups() {
       // Pega as entradas (nome, status) como array
       const entries = Object.entries(backups);
 
-      // Pega os últimos 10 (se tiver menos que 10, pega todos)
-      const ultimos10 = entries.slice(-7);
-
       // Cria os elementos para os últimos 10
-      for (const [nome, status] of ultimos10) {
+      for (const [nome, status] of entries) {
         const div = document.createElement('div');
         div.className = 'flex justify-between bg-white p-2 rounded shadow';
         div.textContent = nome;
@@ -110,12 +117,64 @@ function atualizarBackups() {
     .catch(error => console.error('Erro ao obter backups:', error));
 }
 
+ async function verificarDDNS() {
+    try {
+      const response = await fetch(`${API_BASE}/ddns`);
+      const data = await response.json();
+
+      const statusEl = document.getElementById("ddns-status");
+
+      if (data.match === true) {
+        statusEl.textContent = "ON";
+        statusEl.classList.remove("bg-red-400");
+        statusEl.classList.add("bg-green-400", "text-white");
+      } else {
+        statusEl.textContent = "OFF";
+        statusEl.classList.remove("bg-green-400");
+        statusEl.classList.add("bg-red-400", "text-white");
+      }
+    } catch (erro) {
+      const statusEl = document.getElementById("ddns-status");
+      statusEl.textContent = "Erro";
+      statusEl.classList.remove("bg-green-400", "bg-red-400");
+      statusEl.classList.add("bg-gray-400", "text-white");
+      console.error("Erro ao verificar DDNS:", erro);
+    }
+  }
+
+// Função para atualizar o status do ESP32
+  function atualizarStatusESP() {
+    fetch(`${API_BASE}/esp-status`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro na resposta da rede');
+        }
+        return response.json();
+      })
+      .then(data => {
+        const statusIndicator = document.getElementById('status-indicator');
+        if (data === "True") {
+          statusIndicator.innerHTML = '<span class="text-green-600">ONLINE</span>';
+        } else if (data === "False") {
+          statusIndicator.innerHTML = '<span class="text-red-600">OFFLINE</span>';
+        } else {
+          statusIndicator.innerHTML = '<span class="text-gray-600">INDEFINIDO</span>';
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao buscar o status do ESP:', error);
+        const statusIndicator = document.getElementById('status-indicator');
+        statusIndicator.innerHTML = '<span class="text-red-600">ERRO</span>';
+      });
+}
 // Função para atualizar todos os dados
 function atualizarTudo() {
   atualizarRecursos();
   atualizarConectividade();
   atualizarProcessos();
   atualizarBackups();
+  verificarDDNS();
+  atualizarStatusESP();
 }
 
 // Atualiza os dados ao carregar a página

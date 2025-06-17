@@ -1,5 +1,9 @@
 // Define a base da API que será utilizada nas requisições
-const API_BASE = 'http://127.0.0.1:8080'; // Altere conforme necessário
+const API_BASE = urlServidor; // Altere conforme necessário
+//URL Local
+const urlLocal = 'http://127.0.0.1:8080'
+//URL Servidor
+const urlServidor = "http://caadseguranca.ddns.net:8080"
 
 // Função para atualizar informações de CPU, RAM e Disco
 function atualizarRecursos() {

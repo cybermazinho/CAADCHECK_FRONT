@@ -1,71 +1,97 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br"> <!-- Define o idioma da página como português do Brasil -->
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Painel de Monitoramento</title>
+  <meta charset="UTF-8" /> <!-- Define o conjunto de caracteres como UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- Configura para o design responsivo -->
+  <title>Painel de Monitoramento</title> <!-- Título exibido na aba do navegador -->
+
+  <!-- Importação do Tailwind CSS diretamente via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Importação do Font Awesome para uso de ícones -->
   <link href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Importação de um arquivo CSS local personalizado -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="bg-gray-100 h-screen flex items-center justify-center">
+  <!-- Container principal do painel -->
   <div class="bg-white rounded-2xl shadow-xl w-[1200px] h-[700px] p-6 flex flex-col">
-          <!-- Parte superior: Conexões -->
+
+    <!-- Seção superior contendo duas conexões de rede -->
     <div class="flex space-x-4 mb-4">
-    <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center relative">
-      <h2 class="font-bold">OI</h2>
-      <p id="status-indicator" class="flex items-center justify-center space-x-2 text-red-600 font-semibold">
-        <span>VERIFICANDO...</span>
-      </p>
-      <div class="flex items-center space-x-2 absolute bottom-4 left-4">
-        <i class="fa fa-microchip text-blue-500"></i>
-        <span>Arduino (ESP32)</span>
+      
+      <!-- Cartão de status da conexão OI -->
+      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center relative">
+        <h2 class="font-bold">OI</h2>
+        <p id="status-indicator" class="flex items-center justify-center space-x-2 text-red-600 font-semibold">
+          <span>VERIFICANDO...</span> <!-- Status da conexão OI -->
+        </p>
+        <!-- Indicador do dispositivo Arduino (ESP32) -->
+        <div class="flex items-center space-x-2 absolute bottom-4 left-4">
+          <i class="fa fa-microchip text-blue-500"></i>
+          <span>Arduino (ESP32)</span>
+        </div>
       </div>
-    </div>
-<div class="flex-1 bg-gray-200 rounded-xl p-4 text-center space-y-2 relative">
-  <h2 class="font-bold text-lg">EMBRASNET</h2>
 
-  <div class="flex items-center justify-center">
-    <i class="fa fa-signal text-green-600 mr-2"></i>
-    <p id="embrasnet-status">Carregando...</p>
-  </div>
+      <!-- Cartão de status da conexão EMBRASNET -->
+      <div class="flex-1 bg-gray-200 rounded-xl p-4 text-center space-y-2 relative">
+        <h2 class="font-bold text-lg">EMBRASNET</h2>
 
-  <div class="flex items-center justify-center">
-    <i class="fa fa-clock-o text-red-500 mr-2"></i>
-    <p id="embrasnet-ping">Carregando...</p>
-  </div>
-
-  <div class="flex items-center justify-center">
-    <i class="fa fa-random text-yellow-500 mr-2"></i>
-    <p id="embrasnet-jitter">Carregando...</p>
-  </div>
-
-  <div class="flex items-center justify-center">
-    <i class="fa fa-times-circle text-purple-600 mr-2"></i>
-    <p id="embrasnet-packet-loss">Carregando...</p>
-  </div>
-</div>
-    </div>
-    <div class="flex flex-1 space-x-4">
-      <!-- Coluna da esquerda: Backups -->
-      <div class="w-1/3 bg-gray-100 rounded-xl p-4 flex flex-col">
-        <h3 class="text-center font-semibold mb-2">BACKUP</h3>
-        <div id="backup-list" class="flex-1 border rounded-lg p-2 space-y-2 overflow-y-auto" style="max-height: 360px;">
-          <!-- Itens de backup serão inseridos aqui -->
+        <!-- Indicador de sinal -->
+        <div class="flex items-center justify-center">
+          <i class="fa fa-signal text-green-600 mr-2"></i>
+          <p id="embrasnet-status">Carregando...</p>
         </div>
 
-          <div class="mt-4" id="ddns-status-container">
-            <label class="flex items-center space-x-2">
-              <span>DDNS</span>
-              <span id="ddns-status" class="px-2 py-1 rounded-full text-xs">VERIFICANDO...</span>
-            </label>
-          </div>
+        <!-- Indicador de ping -->
+        <div class="flex items-center justify-center">
+          <i class="fa fa-clock-o text-red-500 mr-2"></i>
+          <p id="embrasnet-ping">Carregando...</p>
+        </div>
+
+        <!-- Indicador de jitter -->
+        <div class="flex items-center justify-center">
+          <i class="fa fa-random text-yellow-500 mr-2"></i>
+          <p id="embrasnet-jitter">Carregando...</p>
+        </div>
+
+        <!-- Indicador de perda de pacotes -->
+        <div class="flex items-center justify-center">
+          <i class="fa fa-times-circle text-purple-600 mr-2"></i>
+          <p id="embrasnet-packet-loss">Carregando...</p>
+        </div>
       </div>
-      <!-- Coluna do meio: CAAD e Recursos -->
+    </div>
+
+    <!-- Corpo principal com três colunas -->
+    <div class="flex flex-1 space-x-4">
+
+      <!-- Coluna da esquerda: informações sobre backup -->
+      <div class="w-1/3 bg-gray-100 rounded-xl p-4 flex flex-col">
+        <h3 class="text-center font-semibold mb-2">BACKUP</h3>
+
+        <!-- Lista de backups com rolagem -->
+        <div id="backup-list" class="flex-1 border rounded-lg p-2 space-y-2 overflow-y-auto" style="max-height: 360px;">
+          <!-- Itens de backup serão inseridos aqui dinamicamente -->
+        </div>
+
+        <!-- Status do DDNS -->
+        <div class="mt-4" id="ddns-status-container">
+          <label class="flex items-center space-x-2">
+            <span>DDNS</span>
+            <span id="ddns-status" class="px-2 py-1 rounded-full text-xs">VERIFICANDO...</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Coluna do meio: sistema e recursos -->
       <div class="w-1/2 flex flex-col items-center justify-center text-center bg-gray-100 rounded-xl p-4">
         <h3 class="text-2xl font-bold mb-4">SISTEMA</h3>
         <div class="w-full space-y-4">
-          <!-- Barra de uso de RAM -->
+
+          <!-- Uso de RAM -->
           <div class="flex items-center space-x-2">
             <i class="fa fa-microchip text-xl"></i>
             <span class="text-sm" id="ram-usage">0/0 RAM</span>
@@ -74,7 +100,7 @@
             <div id="ram-bar" class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
           </div>
 
-          <!-- Barra de uso de CPU -->
+          <!-- Uso de CPU -->
           <div class="flex items-center space-x-2">
             <i class="fa fa-cogs text-xl"></i>
             <span class="text-sm" id="cpu-usage">0% CPU</span>
@@ -83,7 +109,7 @@
             <div id="cpu-bar" class="bg-green-500 h-2 rounded-full" style="width: 0%"></div>
           </div>
 
-          <!-- Barra de uso de HD -->
+          <!-- Uso de Disco -->
           <div class="flex items-center space-x-2">
             <i class="fa fa-hdd-o text-xl"></i>
             <span class="text-sm" id="disk-usage">0% HD</span>
@@ -94,15 +120,17 @@
         </div>
       </div>
 
-      <!-- Coluna da direita: Processos em segundo plano -->
+      <!-- Coluna da direita: processos rodando -->
       <div class="w-1/6 flex flex-col items-center bg-gray-100 rounded-xl p-4">
         <h3 class="text-center font-semibold mb-4">PROCESSOS</h3>
         <div id="process-list" class="space-y-4 w-full border-t border-gray-300 pt-4">
-          <!-- Itens de processos serão inseridos aqui -->
+          <!-- Itens de processos serão inseridos aqui dinamicamente -->
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Inclusão do script JS externo -->
   <script src="script.js"></script>
 </body>
 </html>
